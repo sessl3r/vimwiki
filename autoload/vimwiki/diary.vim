@@ -9,6 +9,7 @@ if exists('g:loaded_vimwiki_diary_auto') || &compatible
   finish
 endif
 let g:loaded_vimwiki_diary_auto = 1
+let g:vimwiki_diary_template = ''
 
 
 function! s:prefix_zero(num) abort
@@ -330,6 +331,19 @@ function! vimwiki#diary#make_note(wnum, ...) abort
   endif
 
   call vimwiki#base#open_link(cmd, link, s:diary_index(wiki_nr))
+
+  " TODO: make configurable, make not hacked
+  let g:vimwiki_diary_template = $HOME.'/vimwiki/diary-template.wiki'
+  if g:vimwiki_diary_template == '' || getline(1,'$') != ['']
+    return
+  endif
+
+  execute 'read '.g:vimwiki_diary_template
+  normal gg
+  execute '0read! date'
+  normal 0i= 
+  normal $a =
+
 endfunction
 
 
